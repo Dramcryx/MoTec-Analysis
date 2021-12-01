@@ -20,6 +20,8 @@ def makeComboboxModel():
 
 def loadMetadata():
     filename = QFileDialog.getOpenFileName()
+    if filename == ('', ''):
+        return
     print(filename)
 
     cut, ok = QInputDialog.getInt(mw, "Удаление хвостов", "Номер первого круга в хвосте")
@@ -39,7 +41,7 @@ def loadMetadata():
         return
     if args.local_pipe:
         head, tail = os.path.split(filename[0])
-        os.system(f"./execpipeline.sh {filename[0]} {cut} {int(d.textValue())} {tail.split('.')[0]}")
+        os.system(f"time ./execpipeline.sh {filename[0]} {cut} {int(d.textValue())} {tail.split('.')[0]}")
         return
     # ssh = paramiko.SSHClient()
     # ssh.set_missing_host_key_policy(paramiko.AutoAddPolicy())
