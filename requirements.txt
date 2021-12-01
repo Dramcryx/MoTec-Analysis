@@ -1,0 +1,4 @@
+clickhouse-driver
+pyspark
+paramiko
+pyqt5
