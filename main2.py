@@ -111,7 +111,7 @@ def get_fields(csvreader: csv.reader):
     globalfields = [i.replace('"','').replace(' ','') for i in expected_fields]
     metadatajson['fields'] = fields
 
-
+lap = 0
 with open(file, newline='') as csvfile:
     counter = 0
     moteccsv = csv.reader(csvfile, delimiter=',', quotechar='|')
@@ -119,6 +119,10 @@ with open(file, newline='') as csvfile:
     get_fields(moteccsv)
 
     lines = []
+    firstrow = moteccsv.__next__()
+    lap = int(firstrow[indexoflap].replace('"', ''))
+    print(lap)
+
     for row in moteccsv:
         if len(row) == 0:
             continue
@@ -141,7 +145,7 @@ reductionRules = {
     indexoflap: reducers.firstVal
 }
 
-laps = analyzers.get_laps(lines, workaround[indexoflap], reductionRules)
+laps = analyzers.get_laps(lines, workaround[indexoflap], reductionRules, lap)
 laps = multiplier.multiply_laps2(laps, 3600 * args.hours)
 for i in laps:
     i.insert(0, raceid)

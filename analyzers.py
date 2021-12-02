@@ -34,7 +34,7 @@ def get_tyre_pitstops(lapscatters, tyre_index, lapindex):
     return tyre_pitsops
 
 
-def get_laps(lapscatters, indexoflap, field_reduction_rules):
+def get_laps(lapscatters, indexoflap, field_reduction_rules, remove_laps):
     laps = []
     current_lap_scatter = 0
 
@@ -47,7 +47,7 @@ def get_laps(lapscatters, indexoflap, field_reduction_rules):
         for lap in laprange:
             for j in range(len(lapscatters[lap])):
                 lapscatters[lap][j] = float(lapscatters[lap][j].replace('"',''))
-            lapscatters[lap][indexoflap] = int(lapscatters[lap][indexoflap])
+            lapscatters[lap][indexoflap] = int(lapscatters[lap][indexoflap]) - remove_laps + 1
         for index in range(len(lapdata)):
             lapdata[index] = field_reduction_rules[index](lapscatters, index, laprange)
         print(lapdata)
@@ -60,7 +60,7 @@ def get_laps(lapscatters, indexoflap, field_reduction_rules):
     for lap in laprange:
         for j in range(len(lapscatters[lap])):
             lapscatters[lap][j] = float(lapscatters[lap][j].replace('"',''))
-        lapscatters[lap][indexoflap] = int(lapscatters[lap][indexoflap])
+        lapscatters[lap][indexoflap] = int(lapscatters[lap][indexoflap]) - remove_laps + 1
     for index in range(len(lapdata)):
         lapdata[index] = field_reduction_rules[index](lapscatters, index, laprange)
     print(lapdata)
