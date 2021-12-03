@@ -1,12 +1,16 @@
+#!/usr/bin/python
+
 import sys
 import argparse
 import os
+import traceback
 
 from PyQt5.QtCore import *
 from PyQt5.QtGui import *
 from PyQt5.QtWidgets import *
 
 from clickhouse_driver import Client
+from clickhouse_driver.errors import NetworkError
 
 import paramiko
 
@@ -128,56 +132,64 @@ if __name__ == '__main__':
     parser.add_argument('--local-pipe', type=bool, default=False, help='Input data')
 
     args = parser.parse_args()
+    client = None
+    try:
+        client = Client(host=args.host)
 
-    client = Client(host=args.host)
+        mw = QMainWindow()
+        mw.setWindowTitle("Клиент к базе")
+        mw.resize(1280, 720)
+        w = QWidget()
 
-    mw = QMainWindow()
-    mw.setWindowTitle("Клиент к базе")
-    mw.resize(1280, 720)
-    w = QWidget()
+        model = QStandardItemModel()
+        
+        t = QTableView()
+        th = t.horizontalHeader()
+        th.setSectionResizeMode(QHeaderView.Stretch)
 
-    model = QStandardItemModel()
-    
-    t = QTableView()
-    th = t.horizontalHeader()
-    th.setSectionResizeMode(QHeaderView.Stretch)
+        t.setModel(model)
 
-    t.setModel(model)
+        cb = QComboBox()
+        cb.setModel(makeComboboxModel())
+        cb.currentTextChanged.connect(lambda text: updateModel(model, int(text) * 3600))
 
-    cb = QComboBox()
-    cb.setModel(makeComboboxModel())
-    cb.currentTextChanged.connect(lambda text: updateModel(model, int(text) * 3600))
+        updateBtn = QPushButton()
+        updateBtn.setText("Обновить метаданные")
+        updateBtn.clicked.connect(lambda: updateModel(model, int(cb.currentText()) * 3600))
 
-    updateBtn = QPushButton()
-    updateBtn.setText("Обновить метаданные")
-    updateBtn.clicked.connect(lambda: updateModel(model, int(cb.currentText()) * 3600))
+        f = QFormLayout()
 
-    f = QFormLayout()
+        f.addRow("Длительность гонки", cb)
+        
+        hbox  = QHBoxLayout()
+        hbox.addWidget(t)
+        hbox.addLayout(f)
 
-    f.addRow("Длительность гонки", cb)
-    
-    hbox  = QHBoxLayout()
-    hbox.addWidget(t)
-    hbox.addLayout(f)
+        lbox = QVBoxLayout()
+        lbox.addWidget(updateBtn)
+        lbox.addLayout(hbox)
 
-    lbox = QVBoxLayout()
-    lbox.addWidget(updateBtn)
-    lbox.addLayout(hbox)
+        w.setLayout(lbox)
 
-    w.setLayout(lbox)
+        mb = QMenuBar()
+        loadMetadataAction = QAction("Загрузить отрезок")
+        loadMetadataAction.triggered.connect(loadMetadata)
+        mb.addAction(loadMetadataAction)
 
-    mb = QMenuBar()
-    loadMetadataAction = QAction("Загрузить отрезок")
-    loadMetadataAction.triggered.connect(loadMetadata)
-    mb.addAction(loadMetadataAction)
+        comparisonAction = QAction("Создать сравнение")
+        comparisonAction.triggered.connect(lambda: submitComparison(model))
+        mb.addAction(comparisonAction)
 
-    comparisonAction = QAction("Создать сравнение")
-    comparisonAction.triggered.connect(lambda: submitComparison(model))
-    mb.addAction(comparisonAction)
-
-    mw.setCentralWidget(w)
-    mw.setMenuBar(mb)
-    mw.show()
-    updateModel(model, int(cb.currentText()) * 3600)
+        mw.setCentralWidget(w)
+        mw.setMenuBar(mb)
+        updateModel(model, int(cb.currentText()) * 3600)
+        mw.show()
+    except NetworkError:
+        QMessageBox.critical(None, "Ошибка БД", f"Не удалось подключиться к базе даннных по адресу {args.host}")
+        exit(1)
+    except Exception as e:
+        print(type(e))
+        QMessageBox.critical(None, "Неизвестная ошибка", traceback.format_exc())
+        exit(1)
 
     sys.exit(app.exec_())

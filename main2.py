@@ -3,9 +3,9 @@ import json
 import uuid
 import argparse
 
-import analyzers
-import reducers
-import multiplier
+import util.analyzers as analyzers
+import util.reducers as reducers
+import util.multiplier as multiplier
 
 parser = argparse.ArgumentParser(description='Process data')
 parser.add_argument('--cut', type=int, help='Where to cut broken tail stats')
