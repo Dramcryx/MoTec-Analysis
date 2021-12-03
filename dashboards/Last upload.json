@@ -1,0 +1,1082 @@
+{
+  "annotations": {
+    "list": [
+      {
+        "builtIn": 1,
+        "datasource": "-- Grafana --",
+        "enable": true,
+        "hide": true,
+        "iconColor": "rgba(0, 211, 255, 1)",
+        "name": "Annotations & Alerts",
+        "target": {
+          "limit": 100,
+          "matchAny": false,
+          "tags": [],
+          "type": "dashboard"
+        },
+        "type": "dashboard"
+      }
+    ]
+  },
+  "editable": true,
+  "fiscalYearStartMonth": 0,
+  "gnetId": null,
+  "graphTooltip": 0,
+  "id": 3,
+  "links": [],
+  "liveNow": false,
+  "panels": [
+    {
+      "datasource": null,
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              }
+            ]
+          }
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 4,
+        "w": 2,
+        "x": 0,
+        "y": 0
+      },
+      "id": 8,
+      "options": {
+        "colorMode": "value",
+        "graphMode": "none",
+        "justifyMode": "center",
+        "orientation": "auto",
+        "reduceOptions": {
+          "calcs": [
+            "range"
+          ],
+          "fields": "/^Lap$/",
+          "values": false
+        },
+        "text": {},
+        "textMode": "auto"
+      },
+      "pluginVersion": "8.2.5",
+      "targets": [
+        {
+          "database": "raceanalysis",
+          "dateColDataType": "",
+          "dateLoading": false,
+          "dateTimeType": "DATETIME",
+          "datetimeLoading": false,
+          "extrapolate": true,
+          "format": "table",
+          "formattedQuery": "SELECT $timeSeries as t, count() FROM $table WHERE $timeFilter GROUP BY t ORDER BY t",
+          "intervalFactor": 1,
+          "query": "SELECT\n    DISTINCT lapnumber as Lap\nFROM $table\n\nWHERE raceid = (select id from raceanalysis.last)\n",
+          "rawQuery": "SELECT\n    DISTINCT lapnumber as Lap\nFROM raceanalysis.racedata\n\nWHERE raceid = (select id from raceanalysis.last)",
+          "refId": "A",
+          "round": "0s",
+          "skip_comments": true,
+          "table": "racedata",
+          "tableLoading": false
+        }
+      ],
+      "title": "Total laps",
+      "type": "stat"
+    },
+    {
+      "datasource": null,
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "decimals": 3,
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              }
+            ]
+          },
+          "unit": "lengthkm"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 4,
+        "w": 8,
+        "x": 2,
+        "y": 0
+      },
+      "id": 6,
+      "options": {
+        "colorMode": "value",
+        "graphMode": "none",
+        "justifyMode": "center",
+        "orientation": "auto",
+        "reduceOptions": {
+          "calcs": [
+            "sum"
+          ],
+          "fields": "/^Distance$/",
+          "values": false
+        },
+        "text": {},
+        "textMode": "auto"
+      },
+      "pluginVersion": "8.2.5",
+      "targets": [
+        {
+          "database": "raceanalysis",
+          "dateColDataType": "",
+          "dateLoading": false,
+          "dateTimeType": "DATETIME",
+          "datetimeLoading": false,
+          "extrapolate": true,
+          "format": "table",
+          "formattedQuery": "SELECT $timeSeries as t, count() FROM $table WHERE $timeFilter GROUP BY t ORDER BY t",
+          "hide": false,
+          "intervalFactor": 1,
+          "query": "SELECT\n    (max(lapnumber) - min(lapnumber)) * 4.088 as Distance\nFROM $table\n\nWHERE raceid = (select id from raceanalysis.last)\n",
+          "rawQuery": "SELECT\n    (max(lapnumber) - min(lapnumber)) * 4.088 as Distance\nFROM raceanalysis.racedata\n\nWHERE raceid = (select id from raceanalysis.last)",
+          "refId": "A",
+          "round": "0s",
+          "skip_comments": true,
+          "table": "racedata",
+          "tableLoading": false
+        }
+      ],
+      "title": "Distance",
+      "transformations": [],
+      "type": "stat"
+    },
+    {
+      "datasource": null,
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              }
+            ]
+          },
+          "unit": "velocitykmh"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 4,
+        "w": 5,
+        "x": 10,
+        "y": 0
+      },
+      "id": 9,
+      "options": {
+        "colorMode": "value",
+        "graphMode": "none",
+        "justifyMode": "center",
+        "orientation": "auto",
+        "reduceOptions": {
+          "calcs": [
+            "mean"
+          ],
+          "fields": "/^Distance$/",
+          "values": false
+        },
+        "text": {},
+        "textMode": "auto"
+      },
+      "pluginVersion": "8.2.5",
+      "targets": [
+        {
+          "database": "raceanalysis",
+          "dateColDataType": "",
+          "dateLoading": false,
+          "dateTimeType": "DATETIME",
+          "datetimeLoading": false,
+          "extrapolate": true,
+          "format": "table",
+          "formattedQuery": "SELECT $timeSeries as t, count() FROM $table WHERE $timeFilter GROUP BY t ORDER BY t",
+          "hide": false,
+          "intervalFactor": 1,
+          "query": "SELECT\n    avg(groundspeed) as Distance\nFROM $table\n\nWHERE raceid = (select id from raceanalysis.last)\n",
+          "rawQuery": true,
+          "refId": "A",
+          "round": "0s",
+          "skip_comments": true,
+          "table": "racedata",
+          "tableLoading": false
+        }
+      ],
+      "title": "Ground speed",
+      "transformations": [],
+      "type": "stat"
+    },
+    {
+      "datasource": null,
+      "description": "",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "decimals": 3,
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              }
+            ]
+          },
+          "unit": "clocks"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 4,
+        "w": 6,
+        "x": 15,
+        "y": 0
+      },
+      "id": 15,
+      "options": {
+        "colorMode": "value",
+        "graphMode": "none",
+        "justifyMode": "center",
+        "orientation": "auto",
+        "reduceOptions": {
+          "calcs": [
+            "mean"
+          ],
+          "fields": "/^LastTime$/",
+          "values": false
+        },
+        "text": {},
+        "textMode": "auto"
+      },
+      "pluginVersion": "8.2.5",
+      "targets": [
+        {
+          "database": "raceanalysis",
+          "dateColDataType": "",
+          "dateLoading": false,
+          "dateTimeType": "DATETIME",
+          "datetimeLoading": false,
+          "extrapolate": true,
+          "format": "table",
+          "formattedQuery": "SELECT $timeSeries as t, count() FROM $table WHERE $timeFilter GROUP BY t ORDER BY t",
+          "hide": false,
+          "intervalFactor": 1,
+          "query": "SELECT\n    max(timepoint) as LastTime\nFROM $table\n\nWHERE raceid = (select id from raceanalysis.last)\n",
+          "rawQuery": "SELECT\n    max(timepoint) as LastTime\nFROM raceanalysis.racedata\n\nWHERE raceid = (select id from raceanalysis.last)",
+          "refId": "A",
+          "round": "0s",
+          "skip_comments": true,
+          "table": "racedata",
+          "tableLoading": false
+        }
+      ],
+      "title": "Total time",
+      "transformations": [],
+      "type": "stat"
+    },
+    {
+      "datasource": null,
+      "description": "",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          },
+          "unit": "percent"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 4,
+        "w": 3,
+        "x": 21,
+        "y": 0
+      },
+      "id": 19,
+      "options": {
+        "colorMode": "value",
+        "graphMode": "none",
+        "justifyMode": "center",
+        "orientation": "auto",
+        "reduceOptions": {
+          "calcs": [
+            "mean"
+          ],
+          "fields": "/^MaxTyreWear$/",
+          "values": false
+        },
+        "text": {},
+        "textMode": "auto"
+      },
+      "pluginVersion": "8.2.5",
+      "targets": [
+        {
+          "database": "raceanalysis",
+          "dateColDataType": "",
+          "dateLoading": false,
+          "dateTimeType": "DATETIME",
+          "datetimeLoading": false,
+          "extrapolate": true,
+          "format": "table",
+          "formattedQuery": "SELECT $timeSeries as t, count() FROM $table WHERE $timeFilter GROUP BY t ORDER BY t",
+          "hide": false,
+          "intervalFactor": 1,
+          "query": "select arrayMax(arr) as MaxTyreWear  from (\n  select array(LeftFrontTyre, RightFrontTyre, LeftRearTyre, RightRearTyre) as arr from (\n    SELECT\n      max(tyrefl) as LeftFrontTyre,\n      max(tyrefr) as RightFrontTyre,\n      max(tyrerl) as LeftRearTyre,\n      max(tyrerr) as RightRearTyre\n    FROM raceanalysis.racedata\n\n    WHERE raceid = (select id from raceanalysis.last)\n  )\n)",
+          "rawQuery": "select arrayMax(arr) as MaxTyreWear  from (\n  select array(LeftFrontTyre, RightFrontTyre, LeftRearTyre, RightRearTyre) as arr from (\n    SELECT\n      max(tyrefl) as LeftFrontTyre,\n      max(tyrefr) as RightFrontTyre,\n      max(tyrerl) as LeftRearTyre,\n      max(tyrerr) as RightRearTyre\n    FROM raceanalysis.racedata\n\n    WHERE raceid = (select id from raceanalysis.last)\n  )\n)",
+          "refId": "A",
+          "round": "0s",
+          "skip_comments": true,
+          "table": "racedata",
+          "tableLoading": false
+        }
+      ],
+      "title": "Max tyre wear",
+      "transformations": [],
+      "type": "stat"
+    },
+    {
+      "datasource": null,
+      "description": "",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              }
+            ]
+          },
+          "unit": "litre"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 6,
+        "w": 5,
+        "x": 0,
+        "y": 4
+      },
+      "id": 16,
+      "options": {
+        "colorMode": "value",
+        "graphMode": "none",
+        "justifyMode": "center",
+        "orientation": "auto",
+        "reduceOptions": {
+          "calcs": [
+            "mean"
+          ],
+          "fields": "/^avg\\(Fuel\\)$/",
+          "values": false
+        },
+        "text": {},
+        "textMode": "auto"
+      },
+      "pluginVersion": "8.2.5",
+      "targets": [
+        {
+          "database": "raceanalysis",
+          "dateColDataType": "",
+          "dateLoading": false,
+          "dateTimeType": "DATETIME",
+          "datetimeLoading": false,
+          "extrapolate": true,
+          "format": "table",
+          "formattedQuery": "SELECT $timeSeries as t, count() FROM $table WHERE $timeFilter GROUP BY t ORDER BY t",
+          "hide": false,
+          "intervalFactor": 1,
+          "query": "select avg(Fuel) from (\nSELECT\n    max(fulel) - min(fulel) as Fuel\nFROM $table\n\nWHERE raceid = (select id from raceanalysis.last)\n\nGROUP BY lapnumber\n\nORDER BY lapnumber\n) where Fuel < 50",
+          "rawQuery": "select avg(Fuel) from (\nSELECT\n    max(fulel) - min(fulel) as Fuel\nFROM raceanalysis.racedata\n\nWHERE raceid = (select id from raceanalysis.last)\n\nGROUP BY lapnumber\n\nORDER BY lapnumber\n) where Fuel < 50",
+          "refId": "A",
+          "round": "0s",
+          "skip_comments": true,
+          "table": "racedata",
+          "tableLoading": false
+        }
+      ],
+      "title": "Average fuel consumption",
+      "transformations": [],
+      "type": "stat"
+    },
+    {
+      "cacheTimeout": null,
+      "datasource": null,
+      "description": "",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          },
+          "unit": "clocks"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 6,
+        "w": 12,
+        "x": 5,
+        "y": 4
+      },
+      "id": 17,
+      "interval": null,
+      "links": [],
+      "maxDataPoints": 100,
+      "options": {
+        "colorMode": "value",
+        "graphMode": "none",
+        "justifyMode": "auto",
+        "orientation": "auto",
+        "reduceOptions": {
+          "calcs": [
+            "mean"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "text": {},
+        "textMode": "auto"
+      },
+      "pluginVersion": "8.2.5",
+      "targets": [
+        {
+          "database": "raceanalysis",
+          "dateColDataType": "",
+          "dateLoading": false,
+          "dateTimeType": "DATETIME",
+          "datetimeLoading": false,
+          "extrapolate": true,
+          "format": "table",
+          "formattedQuery": "SELECT $timeSeries as t, count() FROM $table WHERE $timeFilter GROUP BY t ORDER BY t",
+          "hide": false,
+          "intervalFactor": 1,
+          "query": "SELECT\n    max(timepoint) - min(timepoint) as LapTime\nFROM $table\n\nWHERE raceid = (select id from raceanalysis.last)\n\nGROUP BY lapnumber\n\nORDER BY lapnumber\n",
+          "rawQuery": "SELECT\n    max(timepoint) - min(timepoint) as LapTime\nFROM raceanalysis.racedata\n\nWHERE raceid = (select id from raceanalysis.last)\n\nGROUP BY lapnumber\n\nORDER BY lapnumber",
+          "refId": "A",
+          "round": "0s",
+          "skip_comments": true,
+          "table": "racedata",
+          "tableLoading": false
+        }
+      ],
+      "title": "Average lap time",
+      "transformations": [],
+      "type": "stat"
+    },
+    {
+      "datasource": null,
+      "description": "",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              }
+            ]
+          },
+          "unit": "percent"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 6,
+        "w": 7,
+        "x": 17,
+        "y": 4
+      },
+      "id": 20,
+      "options": {
+        "colorMode": "value",
+        "graphMode": "none",
+        "justifyMode": "center",
+        "orientation": "auto",
+        "reduceOptions": {
+          "calcs": [
+            "mean"
+          ],
+          "fields": "/^AvgTyreWearPerLap$/",
+          "values": false
+        },
+        "text": {},
+        "textMode": "auto"
+      },
+      "pluginVersion": "8.2.5",
+      "targets": [
+        {
+          "database": "raceanalysis",
+          "dateColDataType": "",
+          "dateLoading": false,
+          "dateTimeType": "DATETIME",
+          "datetimeLoading": false,
+          "extrapolate": true,
+          "format": "table",
+          "formattedQuery": "SELECT $timeSeries as t, count() FROM $table WHERE $timeFilter GROUP BY t ORDER BY t",
+          "hide": false,
+          "intervalFactor": 1,
+          "query": "select arrayAvg(arr) as AvgTyreWearPerLap  from (\nselect array(avg(LeftFrontTyre), avg(RightFrontTyre), avg(LeftRearTyre), avg(RightRearTyre)) as arr from (\nSELECT\n  max(tyrefl) - min(tyrefl) as LeftFrontTyre,\n  max(tyrefr) - min(tyrefr) as RightFrontTyre,\n  max(tyrerl) - min(tyrerl) as LeftRearTyre,\n  max(tyrerr) - min(tyrerr) as RightRearTyre\nFROM raceanalysis.racedata\n\nWHERE raceid = (select id from raceanalysis.last)\n\nGROUP BY lapnumber\n\nORDER BY lapnumber\n)\nwhere \nLeftFrontTyre < 10 and RightFrontTyre < 10 and LeftRearTyre < 10 and RightRearTyre < 10\n)",
+          "rawQuery": "select arrayAvg(arr) as AvgTyreWearPerLap  from (\nselect array(avg(LeftFrontTyre), avg(RightFrontTyre), avg(LeftRearTyre), avg(RightRearTyre)) as arr from (\nSELECT\n  max(tyrefl) - min(tyrefl) as LeftFrontTyre,\n  max(tyrefr) - min(tyrefr) as RightFrontTyre,\n  max(tyrerl) - min(tyrerl) as LeftRearTyre,\n  max(tyrerr) - min(tyrerr) as RightRearTyre\nFROM raceanalysis.racedata\n\nWHERE raceid = (select id from raceanalysis.last)\n\nGROUP BY lapnumber\n\nORDER BY lapnumber\n)\nwhere \nLeftFrontTyre < 10 and RightFrontTyre < 10 and LeftRearTyre < 10 and RightRearTyre < 10\n)",
+          "refId": "A",
+          "round": "0s",
+          "skip_comments": true,
+          "table": "racedata",
+          "tableLoading": false
+        }
+      ],
+      "title": "Average tyre wear per lap",
+      "transformations": [],
+      "type": "stat"
+    },
+    {
+      "datasource": null,
+      "description": "",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "decimals": 2,
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              }
+            ]
+          },
+          "unit": "clocks"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 6,
+        "w": 17,
+        "x": 0,
+        "y": 10
+      },
+      "id": 18,
+      "options": {
+        "colorMode": "value",
+        "graphMode": "none",
+        "justifyMode": "center",
+        "orientation": "auto",
+        "reduceOptions": {
+          "calcs": [
+            "mean"
+          ],
+          "fields": "/^LapTime$/",
+          "values": false
+        },
+        "text": {},
+        "textMode": "auto"
+      },
+      "pluginVersion": "8.2.5",
+      "targets": [
+        {
+          "database": "raceanalysis",
+          "dateColDataType": "",
+          "dateLoading": false,
+          "dateTimeType": "DATETIME",
+          "datetimeLoading": false,
+          "extrapolate": true,
+          "format": "table",
+          "formattedQuery": "SELECT $timeSeries as t, count() FROM $table WHERE $timeFilter GROUP BY t ORDER BY t",
+          "hide": false,
+          "intervalFactor": 1,
+          "query": "select *, runningDifference(LapTime) as dlt from (\nSELECT\n    raceid,\n    lapnumber,\n    max(timepoint) - min(timepoint) as LapTime,\n    max(fulel) - min(fulel) as FD\nFROM $table\nWHERE raceid in (select id from raceanalysis.last)\n\nGROUP BY raceid, lapnumber\nORDER BY raceid, lapnumber\n) where FD < 5.0 and dlt < 6.0\nGROUP BY raceid, lapnumber, LapTime, FD\nORDER BY raceid, lapnumber",
+          "rawQuery": "select *, runningDifference(LapTime) as dlt from (\nSELECT\n    raceid,\n    lapnumber,\n    max(timepoint) - min(timepoint) as LapTime,\n    max(fulel) - min(fulel) as FD\nFROM raceanalysis.racedata\nWHERE raceid in (select id from raceanalysis.last)\n\nGROUP BY raceid, lapnumber\nORDER BY raceid, lapnumber\n) where FD < 5.0 and dlt < 6.0\nGROUP BY raceid, lapnumber, LapTime, FD\nORDER BY raceid, lapnumber",
+          "refId": "A",
+          "round": "0s",
+          "skip_comments": true,
+          "table": "racedata",
+          "tableLoading": false
+        }
+      ],
+      "title": "Average lap time without pits",
+      "transformations": [],
+      "type": "stat"
+    },
+    {
+      "datasource": null,
+      "description": "",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "custom": {
+            "align": "auto",
+            "displayMode": "auto",
+            "filterable": false
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          }
+        },
+        "overrides": [
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "FuelLevel"
+            },
+            "properties": [
+              {
+                "id": "custom.displayMode",
+                "value": "basic"
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "lapnumber"
+            },
+            "properties": [
+              {
+                "id": "custom.width",
+                "value": 86
+              }
+            ]
+          }
+        ]
+      },
+      "gridPos": {
+        "h": 6,
+        "w": 7,
+        "x": 17,
+        "y": 10
+      },
+      "id": 2,
+      "options": {
+        "showHeader": true,
+        "sortBy": []
+      },
+      "pluginVersion": "8.2.5",
+      "targets": [
+        {
+          "database": "raceanalysis",
+          "dateColDataType": "",
+          "dateLoading": false,
+          "dateTimeColDataType": "raceid",
+          "dateTimeType": "TIMESTAMP",
+          "datetimeLoading": false,
+          "extrapolate": true,
+          "format": "table",
+          "formattedQuery": "SELECT $timeSeries as t, count() FROM $table WHERE $timeFilter GROUP BY t ORDER BY t",
+          "hide": false,
+          "intervalFactor": 1,
+          "query": "SELECT\n  lapnumber,\n  avg(fulel) as FuelLevel\nFROM $table\n\nWHERE raceid = (select id from raceanalysis.last)\n\nGROUP BY lapnumber\n\nORDER BY lapnumber\n",
+          "rawQuery": "SELECT\n  lapnumber,\n  avg(fulel) as FuelLevel\nFROM raceanalysis.racedata\n\nWHERE raceid = (select id from raceanalysis.last)\n\nGROUP BY lapnumber\n\nORDER BY lapnumber",
+          "refId": "A",
+          "round": "0s",
+          "skip_comments": true,
+          "table": "racedata",
+          "tableLoading": false
+        }
+      ],
+      "timeFrom": null,
+      "timeShift": null,
+      "title": "Fuel level by lap",
+      "type": "table"
+    },
+    {
+      "datasource": null,
+      "gridPos": {
+        "h": 6,
+        "w": 24,
+        "x": 0,
+        "y": 16
+      },
+      "id": 11,
+      "options": {
+        "config": {
+          "displayModeBar": false
+        },
+        "data": [
+          {
+            "line": {
+              "color": "red",
+              "width": 1
+            },
+            "mode": "lines",
+            "type": "scatter"
+          }
+        ],
+        "layout": {
+          "font": {
+            "color": "darkgrey"
+          },
+          "margin": {
+            "b": 20,
+            "t": 30
+          },
+          "paper_bgcolor": "rgba(0,0,0,0)",
+          "plot_bgcolor": "rgba(0,0,0,0)",
+          "showlegend": true,
+          "xaxis": {
+            "autorange": true,
+            "range": [
+              946684800000,
+              978307200000
+            ],
+            "type": "int"
+          },
+          "yaxis": {
+            "autorange": true,
+            "range": [
+              70,
+              80
+            ],
+            "type": "float"
+          }
+        },
+        "onclick": "console.log(data)\nwindow.updateVariables({query:{'var-project':'test'}, partial: true})",
+        "script": "console.log(data)\nvar trace = {\n  x: data.series[0].fields[0].values.buffer,\n  y: data.series[0].fields[1].values.buffer,\n  name: 'Lap time, s'\n};\n  \nreturn {data:[trace],layout:{}};"
+      },
+      "pluginVersion": "8.2.5",
+      "targets": [
+        {
+          "database": "raceanalysis",
+          "dateColDataType": "",
+          "dateLoading": false,
+          "dateTimeType": "DATETIME",
+          "datetimeLoading": false,
+          "extrapolate": true,
+          "format": "table",
+          "formattedQuery": "SELECT $timeSeries as t, count() FROM $table WHERE $timeFilter GROUP BY t ORDER BY t",
+          "intervalFactor": 1,
+          "query": "select *, runningDifference(T) as dT from (\nSELECT\n    lapnumber,\n    max(timepoint) - min(timepoint) as T\nFROM $table\n\nWHERE raceid = (select id from raceanalysis.last)\n\nGROUP BY lapnumber\n\nORDER BY lapnumber\n) where dT < 5.0",
+          "rawQuery": "select *, runningDifference(T) as dT from (\nSELECT\n    lapnumber,\n    max(timepoint) - min(timepoint) as T\nFROM raceanalysis.racedata\n\nWHERE raceid = (select id from raceanalysis.last)\n\nGROUP BY lapnumber\n\nORDER BY lapnumber\n) where dT < 5.0",
+          "refId": "A",
+          "round": "0s",
+          "skip_comments": true,
+          "table": "racedata",
+          "tableLoading": false
+        }
+      ],
+      "timeFrom": null,
+      "timeShift": null,
+      "title": "Lap time chart",
+      "type": "ae3e-plotly-panel"
+    },
+    {
+      "datasource": null,
+      "description": "",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "custom": {
+            "align": "auto",
+            "displayMode": "auto",
+            "width": 200
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              }
+            ]
+          }
+        },
+        "overrides": [
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Lap"
+            },
+            "properties": [
+              {
+                "id": "custom.width",
+                "value": 196
+              }
+            ]
+          }
+        ]
+      },
+      "gridPos": {
+        "h": 9,
+        "w": 2,
+        "x": 0,
+        "y": 22
+      },
+      "id": 23,
+      "options": {
+        "showHeader": true,
+        "sortBy": []
+      },
+      "pluginVersion": "8.2.5",
+      "targets": [
+        {
+          "database": "raceanalysis",
+          "dateColDataType": "",
+          "dateLoading": false,
+          "dateTimeType": "DATETIME",
+          "datetimeLoading": false,
+          "extrapolate": true,
+          "format": "table",
+          "formattedQuery": "SELECT $timeSeries as t, count() FROM $table WHERE $timeFilter GROUP BY t ORDER BY t",
+          "intervalFactor": 1,
+          "query": "SELECT Lap from (\nSELECT\n    raceid,\n    lapnumber as Lap,\n    max(tyrefl) - min(tyrefl) as FD\nFROM $table\n\nWHERE raceid in (select id from raceanalysis.last)\n\nGROUP BY raceid, lapnumber\n\nORDER BY raceid, lapnumber\n) where FD > 2.0",
+          "rawQuery": "SELECT Lap from (\nSELECT\n    raceid,\n    lapnumber as Lap,\n    max(tyrefl) - min(tyrefl) as FD\nFROM raceanalysis.racedata\n\nWHERE raceid in (select id from raceanalysis.last)\n\nGROUP BY raceid, lapnumber\n\nORDER BY raceid, lapnumber\n) where FD > 2.0",
+          "refId": "A",
+          "round": "0s",
+          "skip_comments": true,
+          "table": "racedata",
+          "tableLoading": false
+        }
+      ],
+      "title": "Tyre pitstops",
+      "type": "table"
+    },
+    {
+      "datasource": null,
+      "description": "",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "custom": {
+            "align": "auto",
+            "displayMode": "auto",
+            "width": 200
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          }
+        },
+        "overrides": [
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Lap"
+            },
+            "properties": [
+              {
+                "id": "custom.width",
+                "value": 197
+              }
+            ]
+          }
+        ]
+      },
+      "gridPos": {
+        "h": 9,
+        "w": 2,
+        "x": 2,
+        "y": 22
+      },
+      "id": 22,
+      "options": {
+        "showHeader": true,
+        "sortBy": []
+      },
+      "pluginVersion": "8.2.5",
+      "targets": [
+        {
+          "database": "raceanalysis",
+          "dateColDataType": "",
+          "dateLoading": false,
+          "dateTimeType": "DATETIME",
+          "datetimeLoading": false,
+          "extrapolate": true,
+          "format": "table",
+          "formattedQuery": "SELECT $timeSeries as t, count() FROM $table WHERE $timeFilter GROUP BY t ORDER BY t",
+          "intervalFactor": 1,
+          "query": "select Lap from (\nSELECT\n    lapnumber as Lap,\n    deltaSum(fulel) as FD\nFROM $table\n\nWHERE raceid = (select id from raceanalysis.last)\n\nGROUP BY lapnumber\n\nORDER BY lapnumber\n)\nwhere FD > 20",
+          "rawQuery": "select Lap from (\nSELECT\n    lapnumber as Lap,\n    deltaSum(fulel) as FD\nFROM raceanalysis.racedata\n\nWHERE raceid = (select id from raceanalysis.last)\n\nGROUP BY lapnumber\n\nORDER BY lapnumber\n)\nwhere FD > 20",
+          "refId": "A",
+          "round": "0s",
+          "skip_comments": true,
+          "table": "racedata",
+          "tableLoading": false
+        }
+      ],
+      "title": "Fuel pitstops",
+      "type": "table"
+    },
+    {
+      "datasource": null,
+      "description": "",
+      "gridPos": {
+        "h": 9,
+        "w": 20,
+        "x": 4,
+        "y": 22
+      },
+      "id": 4,
+      "options": {
+        "config": {
+          "displayModeBar": false
+        },
+        "data": [
+          {
+            "line": {
+              "color": "red",
+              "width": 2
+            },
+            "mode": "lines",
+            "type": "scatter"
+          }
+        ],
+        "layout": {
+          "font": {
+            "color": "darkgrey"
+          },
+          "margin": {
+            "b": 20,
+            "t": 30
+          },
+          "paper_bgcolor": "rgba(0,0,0,0)",
+          "plot_bgcolor": "rgba(0,0,0,0)",
+          "xaxis": {
+            "autorange": true,
+            "range": [
+              -1,
+              6
+            ],
+            "type": "number"
+          }
+        },
+        "onclick": "console.log(data)\nwindow.updateVariables({query:{'var-project':'test'}, partial: true})",
+        "script": "console.log(data)\nvar trace = {\n  x: data.series[0].fields[0].values.buffer,\n  y: data.series[0].fields[1].values.buffer,\n  name: 'Fuel, L'\n}\n\nvar trace2 = {\n  x: data.series[0].fields[0].values.buffer,\n  y: data.series[0].fields[2].values.buffer,\n  name: 'FL wear, %'\n}\n\nvar trace3 = {\n  x: data.series[0].fields[0].values.buffer,\n  y: data.series[0].fields[3].values.buffer,\n  name: 'FR wear, %'\n}\nvar trace4 = {\n  x: data.series[0].fields[0].values.buffer,\n  y: data.series[0].fields[4].values.buffer,\n  name: 'RL wear, %'\n}\nvar trace5 = {\n  x: data.series[0].fields[0].values.buffer,\n  y: data.series[0].fields[5].values.buffer,\n  name: 'RR wear, %'\n}\nreturn {data:[trace,trace2, trace3, trace4, trace5],layout:{}};"
+      },
+      "pluginVersion": "8.2.5",
+      "targets": [
+        {
+          "database": "raceanalysis",
+          "dateColDataType": "",
+          "dateLoading": false,
+          "dateTimeType": "DATETIME",
+          "datetimeLoading": false,
+          "extrapolate": false,
+          "format": "table",
+          "formattedQuery": "SELECT $timeSeries as t, count() FROM $table WHERE $timeFilter GROUP BY t ORDER BY t",
+          "interval": "",
+          "intervalFactor": 1,
+          "query": "SELECT\n  lapnumber as Lap,\n  avg(fulel) as FuelLevel,\n  avg(tyrefl) as LeftFrontTyre,\n  avg(tyrefr) as RightFrontTyre,\n  avg(tyrerl) as LeftRearTyre,\n  avg(tyrerr) as RightRearTyre\nFROM raceanalysis.racedata\n\nWHERE raceid = (select id from raceanalysis.last)\n\nGROUP BY Lap\n\nORDER BY Lap\n",
+          "rawQuery": "SELECT\n  lapnumber as Lap,\n  avg(fulel) as FuelLevel,\n  avg(tyrefl) as LeftFrontTyre,\n  avg(tyrefr) as RightFrontTyre,\n  avg(tyrerl) as LeftRearTyre,\n  avg(tyrerr) as RightRearTyre\nFROM raceanalysis.racedata\n\nWHERE raceid = (select id from raceanalysis.last)\n\nGROUP BY Lap\n\nORDER BY Lap",
+          "refId": "A",
+          "round": "0s",
+          "skip_comments": false,
+          "table": "racedata",
+          "tableLoading": false
+        }
+      ],
+      "title": "Tyre wear over laps",
+      "type": "ae3e-plotly-panel"
+    }
+  ],
+  "refresh": "",
+  "schemaVersion": 32,
+  "style": "dark",
+  "tags": [],
+  "templating": {
+    "list": []
+  },
+  "time": {
+    "from": "now-6h",
+    "to": "now"
+  },
+  "timepicker": {},
+  "timezone": "",
+  "title": "Last upload",
+  "uid": "Y8aF3Wpnk",
+  "version": 10
+}

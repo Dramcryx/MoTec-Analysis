@@ -1,0 +1,946 @@
+{
+  "annotations": {
+    "list": [
+      {
+        "builtIn": 1,
+        "datasource": "-- Grafana --",
+        "enable": true,
+        "hide": true,
+        "iconColor": "rgba(0, 211, 255, 1)",
+        "name": "Annotations & Alerts",
+        "target": {
+          "limit": 100,
+          "matchAny": false,
+          "tags": [],
+          "type": "dashboard"
+        },
+        "type": "dashboard"
+      }
+    ]
+  },
+  "editable": true,
+  "fiscalYearStartMonth": 0,
+  "gnetId": null,
+  "graphTooltip": 0,
+  "id": 2,
+  "links": [],
+  "liveNow": false,
+  "panels": [
+    {
+      "datasource": null,
+      "description": "",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "custom": {
+            "align": "auto",
+            "displayMode": "auto"
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          }
+        },
+        "overrides": [
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "vehicleclass"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "Vehicle class"
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "vehiclename"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "Vehicle name"
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "racedate"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "Date of telemetry"
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "racetime"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "Time of telemetery"
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "UUID"
+            },
+            "properties": [
+              {
+                "id": "custom.width",
+                "value": 499
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Track"
+            },
+            "properties": [
+              {
+                "id": "custom.width",
+                "value": 170
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Vehicle class"
+            },
+            "properties": [
+              {
+                "id": "custom.width",
+                "value": 105
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Vehicle name"
+            },
+            "properties": [
+              {
+                "id": "custom.width",
+                "value": 126
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Driver"
+            },
+            "properties": [
+              {
+                "id": "custom.width",
+                "value": 148
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Date of telemetry"
+            },
+            "properties": [
+              {
+                "id": "custom.width",
+                "value": 264
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "configname"
+            },
+            "properties": [
+              {
+                "id": "custom.width",
+                "value": 541
+              }
+            ]
+          }
+        ]
+      },
+      "gridPos": {
+        "h": 6,
+        "w": 23,
+        "x": 0,
+        "y": 0
+      },
+      "id": 8,
+      "options": {
+        "showHeader": true,
+        "sortBy": []
+      },
+      "pluginVersion": "8.2.5",
+      "targets": [
+        {
+          "database": "raceanalysis",
+          "dateColDataType": "",
+          "dateLoading": false,
+          "dateTimeType": "DATETIME",
+          "datetimeLoading": false,
+          "extrapolate": true,
+          "format": "table",
+          "formattedQuery": "SELECT $timeSeries as t, count() FROM $table WHERE $timeFilter GROUP BY t ORDER BY t",
+          "intervalFactor": 1,
+          "query": "select configname, uuid as UUID, track as Track, vehicleclass, vehiclename, driver as Driver, racedate, racetime from raceanalysis.racemetadata \n\nWHERE uuid in (select uuid from raceanalysis.comparison)\n\ngroup by configname, uuid, track, vehicleclass, vehiclename, driver, racedate, racetime, samplespersec, duration\n",
+          "rawQuery": "select configname, uuid as UUID, track as Track, vehicleclass, vehiclename, driver as Driver, racedate, racetime from raceanalysis.racemetadata \n\nWHERE uuid in (select uuid from raceanalysis.comparison)\n\ngroup by configname, uuid, track, vehicleclass, vehiclename, driver, racedate, racetime, samplespersec, duration",
+          "refId": "A",
+          "round": "0s",
+          "skip_comments": true,
+          "table": "racedata",
+          "tableLoading": false
+        }
+      ],
+      "title": "Comparison metadata",
+      "type": "table"
+    },
+    {
+      "datasource": null,
+      "description": "",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "custom": {
+            "align": "auto",
+            "displayMode": "gradient-gauge"
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "percentage",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "#EAB839",
+                "value": 80
+              },
+              {
+                "color": "#6ED0E0",
+                "value": 99
+              },
+              {
+                "color": "green",
+                "value": 100
+              }
+            ]
+          }
+        },
+        "overrides": [
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Distance"
+            },
+            "properties": [
+              {
+                "id": "unit",
+                "value": "lengthkm"
+              },
+              {
+                "id": "custom.width",
+                "value": 100
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "TotalTime"
+            },
+            "properties": [
+              {
+                "id": "unit",
+                "value": "clocks"
+              },
+              {
+                "id": "custom.width",
+                "value": 171
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "RaceID"
+            },
+            "properties": [
+              {
+                "id": "custom.width",
+                "value": 253
+              },
+              {
+                "id": "custom.displayMode",
+                "value": "auto"
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Laps"
+            },
+            "properties": [
+              {
+                "id": "custom.width",
+                "value": 75
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Speed"
+            },
+            "properties": [
+              {
+                "id": "custom.width",
+                "value": 112
+              }
+            ]
+          }
+        ]
+      },
+      "gridPos": {
+        "h": 6,
+        "w": 7,
+        "x": 0,
+        "y": 6
+      },
+      "id": 2,
+      "options": {
+        "showHeader": true,
+        "sortBy": []
+      },
+      "pluginVersion": "8.2.5",
+      "targets": [
+        {
+          "database": "raceanalysis",
+          "dateColDataType": "",
+          "dateLoading": false,
+          "dateTimeType": "DATETIME",
+          "datetimeLoading": false,
+          "extrapolate": true,
+          "format": "table",
+          "formattedQuery": "SELECT $timeSeries as t, count() FROM $table WHERE $timeFilter GROUP BY t ORDER BY t",
+          "intervalFactor": 1,
+          "query": "SELECT\n    raceid as RaceID,\n    max(lapnumber) - min(lapnumber) as Laps,\n    (max(lapnumber) - min(lapnumber)) * 4.088 as Distance,\n    avg(groundspeed) as Speed,\n    max(timepoint) as TotalTime\nFROM $table\n\nWHERE RaceID in (select uuid from raceanalysis.comparison)\nGROUP BY RaceID\nORDER BY RaceID\n",
+          "rawQuery": "SELECT\n    raceid as RaceID,\n    max(lapnumber) - min(lapnumber) as Laps,\n    (max(lapnumber) - min(lapnumber)) * 4.088 as Distance,\n    avg(groundspeed) as Speed,\n    max(timepoint) as TotalTime\nFROM raceanalysis.racedata\n\nWHERE RaceID in (select uuid from raceanalysis.comparison)\nGROUP BY RaceID\nORDER BY RaceID",
+          "refId": "A",
+          "round": "0s",
+          "skip_comments": true,
+          "table": "racedata",
+          "tableLoading": false
+        }
+      ],
+      "title": "Total laps",
+      "type": "table"
+    },
+    {
+      "datasource": null,
+      "description": "",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "custom": {
+            "align": "auto",
+            "displayMode": "auto"
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "percentage",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          },
+          "unit": "percent"
+        },
+        "overrides": [
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "MaxTyreWear"
+            },
+            "properties": [
+              {
+                "id": "custom.width",
+                "value": 196
+              },
+              {
+                "id": "custom.displayMode",
+                "value": "gradient-gauge"
+              }
+            ]
+          }
+        ]
+      },
+      "gridPos": {
+        "h": 6,
+        "w": 2,
+        "x": 7,
+        "y": 6
+      },
+      "id": 4,
+      "options": {
+        "showHeader": true,
+        "sortBy": []
+      },
+      "pluginVersion": "8.2.5",
+      "targets": [
+        {
+          "database": "raceanalysis",
+          "dateColDataType": "",
+          "dateLoading": false,
+          "dateTimeType": "DATETIME",
+          "datetimeLoading": false,
+          "extrapolate": true,
+          "format": "table",
+          "formattedQuery": "SELECT $timeSeries as t, count() FROM $table WHERE $timeFilter GROUP BY t ORDER BY t",
+          "hide": false,
+          "intervalFactor": 1,
+          "query": "select arrayMax(arr) as MaxTyreWear  from (\n  select raceid, array(LeftFrontTyre, RightFrontTyre, LeftRearTyre, RightRearTyre) as arr from (\n    SELECT\n      raceid,\n      max(tyrefl) as LeftFrontTyre,\n      max(tyrefr) as RightFrontTyre,\n      max(tyrerl) as LeftRearTyre,\n      max(tyrerr) as RightRearTyre\n    FROM raceanalysis.racedata\n\n    WHERE raceid in (select uuid from raceanalysis.comparison)\n    group by raceid\n  )\n  group by arr, raceid\n)\ngroup by raceid, arr\nORDER BY raceid",
+          "rawQuery": "select arrayMax(arr) as MaxTyreWear  from (\n  select raceid, array(LeftFrontTyre, RightFrontTyre, LeftRearTyre, RightRearTyre) as arr from (\n    SELECT\n      raceid,\n      max(tyrefl) as LeftFrontTyre,\n      max(tyrefr) as RightFrontTyre,\n      max(tyrerl) as LeftRearTyre,\n      max(tyrerr) as RightRearTyre\n    FROM raceanalysis.racedata\n\n    WHERE raceid in (select uuid from raceanalysis.comparison)\n    group by raceid\n  )\n  group by arr, raceid\n)\ngroup by raceid, arr\nORDER BY raceid",
+          "refId": "A",
+          "round": "0s",
+          "skip_comments": true,
+          "table": "racedata",
+          "tableLoading": false
+        }
+      ],
+      "title": "Max tyre wear",
+      "transformations": [],
+      "type": "table"
+    },
+    {
+      "datasource": null,
+      "description": "",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "custom": {
+            "align": "auto",
+            "displayMode": "auto"
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "percentage",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "red",
+                "value": 90
+              }
+            ]
+          },
+          "unit": "percent"
+        },
+        "overrides": [
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "avg(Fuel)"
+            },
+            "properties": [
+              {
+                "id": "custom.displayMode",
+                "value": "gradient-gauge"
+              },
+              {
+                "id": "displayName",
+                "value": "Fuel"
+              },
+              {
+                "id": "unit",
+                "value": "litre"
+              }
+            ]
+          }
+        ]
+      },
+      "gridPos": {
+        "h": 6,
+        "w": 3,
+        "x": 9,
+        "y": 6
+      },
+      "id": 5,
+      "options": {
+        "showHeader": true
+      },
+      "pluginVersion": "8.2.5",
+      "targets": [
+        {
+          "database": "raceanalysis",
+          "dateColDataType": "",
+          "dateLoading": false,
+          "dateTimeType": "DATETIME",
+          "datetimeLoading": false,
+          "extrapolate": true,
+          "format": "table",
+          "formattedQuery": "SELECT $timeSeries as t, count() FROM $table WHERE $timeFilter GROUP BY t ORDER BY t",
+          "hide": false,
+          "intervalFactor": 1,
+          "query": "select avg(Fuel) from (\nSELECT\n    raceid,\n    max(fulel) - min(fulel) as Fuel\nFROM $table\n\nWHERE raceid in (select uuid from raceanalysis.comparison)\n\nGROUP BY lapnumber, raceid\nORDER BY lapnumber\n) where Fuel < 50\n\nGROUP BY raceid\nORDER BY raceid",
+          "rawQuery": "select avg(Fuel) from (\nSELECT\n    raceid,\n    max(fulel) - min(fulel) as Fuel\nFROM raceanalysis.racedata\n\nWHERE raceid in (select uuid from raceanalysis.comparison)\n\nGROUP BY lapnumber, raceid\nORDER BY lapnumber\n) where Fuel < 50\n\nGROUP BY raceid\nORDER BY raceid",
+          "refId": "A",
+          "round": "0s",
+          "skip_comments": true,
+          "table": "racedata",
+          "tableLoading": false
+        }
+      ],
+      "title": "Avg fuel consumption per lap",
+      "transformations": [],
+      "type": "table"
+    },
+    {
+      "datasource": null,
+      "description": "",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "custom": {
+            "align": "auto",
+            "displayMode": "auto"
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "percentage",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          },
+          "unit": "percent"
+        },
+        "overrides": [
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "avg(Fuel)"
+            },
+            "properties": [
+              {
+                "id": "custom.displayMode",
+                "value": "gradient-gauge"
+              },
+              {
+                "id": "displayName",
+                "value": "Lap Time"
+              },
+              {
+                "id": "unit",
+                "value": "clocks"
+              }
+            ]
+          }
+        ]
+      },
+      "gridPos": {
+        "h": 6,
+        "w": 3,
+        "x": 12,
+        "y": 6
+      },
+      "id": 9,
+      "options": {
+        "showHeader": true
+      },
+      "pluginVersion": "8.2.5",
+      "targets": [
+        {
+          "database": "raceanalysis",
+          "dateColDataType": "",
+          "dateLoading": false,
+          "dateTimeType": "DATETIME",
+          "datetimeLoading": false,
+          "extrapolate": true,
+          "format": "table",
+          "formattedQuery": "SELECT $timeSeries as t, count() FROM $table WHERE $timeFilter GROUP BY t ORDER BY t",
+          "hide": false,
+          "intervalFactor": 1,
+          "query": "select avg(Fuel) from (\nSELECT\n    raceid,\n    max(timepoint) - min(timepoint) as Fuel\nFROM $table\n\nWHERE raceid in (select uuid from raceanalysis.comparison)\n\nGROUP BY lapnumber, raceid\nORDER BY lapnumber\n)\n\nGROUP BY raceid\nORDER BY raceid",
+          "rawQuery": "select avg(Fuel) from (\nSELECT\n    raceid,\n    max(timepoint) - min(timepoint) as Fuel\nFROM raceanalysis.racedata\n\nWHERE raceid in (select uuid from raceanalysis.comparison)\n\nGROUP BY lapnumber, raceid\nORDER BY lapnumber\n)\n\nGROUP BY raceid\nORDER BY raceid",
+          "refId": "A",
+          "round": "0s",
+          "skip_comments": true,
+          "table": "racedata",
+          "tableLoading": false
+        }
+      ],
+      "title": "Avg lap time",
+      "transformations": [],
+      "type": "table"
+    },
+    {
+      "datasource": null,
+      "description": "",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "custom": {
+            "align": "auto",
+            "displayMode": "gradient-gauge"
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "percentage",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "red",
+                "value": 90
+              }
+            ]
+          },
+          "unit": "percent"
+        },
+        "overrides": [
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "AvgTyreWearPerLap"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "Tyre wear"
+              }
+            ]
+          }
+        ]
+      },
+      "gridPos": {
+        "h": 6,
+        "w": 3,
+        "x": 15,
+        "y": 6
+      },
+      "id": 6,
+      "options": {
+        "showHeader": true
+      },
+      "pluginVersion": "8.2.5",
+      "targets": [
+        {
+          "database": "raceanalysis",
+          "dateColDataType": "",
+          "dateLoading": false,
+          "dateTimeType": "DATETIME",
+          "datetimeLoading": false,
+          "extrapolate": true,
+          "format": "table",
+          "formattedQuery": "SELECT $timeSeries as t, count() FROM $table WHERE $timeFilter GROUP BY t ORDER BY t",
+          "hide": false,
+          "intervalFactor": 1,
+          "query": "select arrayAvg(arr) as AvgTyreWearPerLap  from (\n  select raceid, array(avg(LeftFrontTyre), avg(RightFrontTyre), avg(LeftRearTyre), avg(RightRearTyre)) as arr from (\n    SELECT\n      raceid,\n      max(tyrefl) - min(tyrefl) as LeftFrontTyre,\n      max(tyrefr) - min(tyrefr) as RightFrontTyre,\n      max(tyrerl) - min(tyrerl) as LeftRearTyre,\n      max(tyrerr) - min(tyrerr) as RightRearTyre\n    FROM raceanalysis.racedata\n\n    WHERE raceid in (select uuid from raceanalysis.comparison)\n\n    GROUP BY raceid, lapnumber\n\n    ORDER BY raceid, lapnumber\n  ) as SHIT\nwhere \nSHIT.LeftFrontTyre < 10 and SHIT.RightFrontTyre < 10 and SHIT.LeftRearTyre < 10 and SHIT.RightRearTyre < 10\nGROUP by raceid\n)\nORDER BY raceid",
+          "rawQuery": "select arrayAvg(arr) as AvgTyreWearPerLap  from (\n  select raceid, array(avg(LeftFrontTyre), avg(RightFrontTyre), avg(LeftRearTyre), avg(RightRearTyre)) as arr from (\n    SELECT\n      raceid,\n      max(tyrefl) - min(tyrefl) as LeftFrontTyre,\n      max(tyrefr) - min(tyrefr) as RightFrontTyre,\n      max(tyrerl) - min(tyrerl) as LeftRearTyre,\n      max(tyrerr) - min(tyrerr) as RightRearTyre\n    FROM raceanalysis.racedata\n\n    WHERE raceid in (select uuid from raceanalysis.comparison)\n\n    GROUP BY raceid, lapnumber\n\n    ORDER BY raceid, lapnumber\n  ) as SHIT\nwhere \nSHIT.LeftFrontTyre < 10 and SHIT.RightFrontTyre < 10 and SHIT.LeftRearTyre < 10 and SHIT.RightRearTyre < 10\nGROUP by raceid\n)\nORDER BY raceid",
+          "refId": "A",
+          "round": "0s",
+          "skip_comments": true,
+          "table": "racedata",
+          "tableLoading": false
+        }
+      ],
+      "title": "Average tyre wear per lap",
+      "transformations": [],
+      "type": "table"
+    },
+    {
+      "datasource": null,
+      "description": "",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "custom": {
+            "align": "auto",
+            "displayMode": "auto",
+            "width": 200
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              }
+            ]
+          }
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 26,
+        "w": 4,
+        "x": 19,
+        "y": 6
+      },
+      "id": 11,
+      "options": {
+        "showHeader": true
+      },
+      "pluginVersion": "8.2.5",
+      "targets": [
+        {
+          "database": "raceanalysis",
+          "dateColDataType": "",
+          "dateLoading": false,
+          "dateTimeType": "DATETIME",
+          "datetimeLoading": false,
+          "extrapolate": true,
+          "format": "table",
+          "formattedQuery": "SELECT $timeSeries as t, count() FROM $table WHERE $timeFilter GROUP BY t ORDER BY t",
+          "intervalFactor": 1,
+          "query": "SELECT raceid, Lap from (\nSELECT\n    raceid,\n    lapnumber as Lap,\n    max(fulel) - min(fulel) as FD\nFROM $table\n\nWHERE raceid in (select uuid from raceanalysis.comparison)\n\nGROUP BY raceid, lapnumber\n\nORDER BY raceid, lapnumber\n) where FD > 50",
+          "rawQuery": "SELECT raceid, Lap from (\nSELECT\n    raceid,\n    lapnumber as Lap,\n    max(fulel) - min(fulel) as FD\nFROM raceanalysis.racedata\n\nWHERE raceid in (select uuid from raceanalysis.comparison)\n\nGROUP BY raceid, lapnumber\n\nORDER BY raceid, lapnumber\n) where FD > 50",
+          "refId": "A",
+          "round": "0s",
+          "skip_comments": true,
+          "table": "racedata",
+          "tableLoading": false
+        }
+      ],
+      "title": "Fuel pitstops",
+      "type": "table"
+    },
+    {
+      "datasource": null,
+      "description": "",
+      "gridPos": {
+        "h": 11,
+        "w": 19,
+        "x": 0,
+        "y": 12
+      },
+      "id": 14,
+      "options": {
+        "config": {
+          "displayModeBar": false
+        },
+        "data": [
+          {
+            "line": {
+              "color": "red",
+              "width": 1
+            },
+            "mode": "lines",
+            "type": "scatter"
+          }
+        ],
+        "layout": {
+          "font": {
+            "color": "darkgrey"
+          },
+          "margin": {
+            "b": 20,
+            "t": 30
+          },
+          "paper_bgcolor": "rgba(0,0,0,0)",
+          "plot_bgcolor": "rgba(0,0,0,0)",
+          "showlegend": true,
+          "xaxis": {
+            "autorange": true,
+            "range": [
+              946684800000,
+              978307200000
+            ],
+            "type": "int"
+          },
+          "yaxis": {
+            "autorange": true,
+            "range": [
+              70,
+              80
+            ],
+            "type": "float"
+          }
+        },
+        "onclick": "console.log(data)\nwindow.updateVariables({query:{'var-project':'test'}, partial: true})",
+        "script": "var indexes = []\n\nfunction onlyUnique(value, index, self) {\n  let res = self.indexOf(value) === index;\n  if (res) {\n    indexes.push(index);\n  }\n  return res;\n}\n\nvar filterIndexLo = 0;\nvar filterIndexHi = 0;\n\nfunction indexLess(value, index, self) {\n  return (index >= filterIndexLo && index < filterIndexHi);\n}\n\nvar unique = data.series[0].fields[0].values.buffer.filter(onlyUnique)\nconsole.log(unique);\nconsole.log(indexes);\nindexes.shift();\nindexes.push(data.series[0].fields[0].values.buffer.length);\nconsole.log(indexes);\n\ntraces = []\nfor (let i = 0; i < indexes.length; ++i) {\n  filterIndexHi = indexes[i];\n  var tracei = {\n    x: data.series[0].fields[1].values.buffer.filter(indexLess),\n    y: data.series[0].fields[2].values.buffer.filter(indexLess),\n    name: unique[i]\n  };\n  traces.push(tracei)\n  filterIndexLo = filterIndexHi;\n}\n\nconsole.log(traces)\n\nvar trace = {\n  x: data.series[0].fields[0].values.buffer,\n  y: data.series[0].fields[1].values.buffer,\n  name: 'Lap time, s'\n};\n  \nreturn {data:traces,layout:{}};"
+      },
+      "pluginVersion": "8.2.5",
+      "targets": [
+        {
+          "database": "raceanalysis",
+          "dateColDataType": "",
+          "dateLoading": false,
+          "dateTimeType": "DATETIME",
+          "datetimeLoading": false,
+          "extrapolate": true,
+          "format": "table",
+          "formattedQuery": "SELECT $timeSeries as t, count() FROM $table WHERE $timeFilter GROUP BY t ORDER BY t",
+          "intervalFactor": 1,
+          "query": "select *, runningDifference(LapTime) as dlt from (\nSELECT\n    raceid,\n    lapnumber,\n    max(timepoint) - min(timepoint) as LapTime,\n    max(fulel) - min(fulel) as FD\nFROM $table\nWHERE raceid in (select uuid from raceanalysis.comparison)\n\nGROUP BY raceid, lapnumber\nORDER BY raceid, lapnumber\n) where FD < 5.0 and dlt < 6.0\nGROUP BY raceid, lapnumber, LapTime, FD\nORDER BY raceid, lapnumber",
+          "rawQuery": "select *, runningDifference(LapTime) as dlt from (\nSELECT\n    raceid,\n    lapnumber,\n    max(timepoint) - min(timepoint) as LapTime,\n    max(fulel) - min(fulel) as FD\nFROM raceanalysis.racedata\nWHERE raceid in (select uuid from raceanalysis.comparison)\n\nGROUP BY raceid, lapnumber\nORDER BY raceid, lapnumber\n) where FD < 5.0 and dlt < 6.0\nGROUP BY raceid, lapnumber, LapTime, FD\nORDER BY raceid, lapnumber",
+          "refId": "A",
+          "round": "0s",
+          "skip_comments": true,
+          "table": "racedata",
+          "tableLoading": false
+        }
+      ],
+      "timeFrom": null,
+      "timeShift": null,
+      "title": "Lap time chart",
+      "type": "ae3e-plotly-panel"
+    },
+    {
+      "datasource": null,
+      "description": "",
+      "gridPos": {
+        "h": 9,
+        "w": 19,
+        "x": 0,
+        "y": 23
+      },
+      "id": 15,
+      "options": {
+        "config": {
+          "displayModeBar": false
+        },
+        "data": [
+          {
+            "line": {
+              "color": "red",
+              "width": 1
+            },
+            "mode": "lines",
+            "type": "scatter"
+          }
+        ],
+        "layout": {
+          "font": {
+            "color": "darkgrey"
+          },
+          "margin": {
+            "b": 20,
+            "t": 30
+          },
+          "paper_bgcolor": "rgba(0,0,0,0)",
+          "plot_bgcolor": "rgba(0,0,0,0)",
+          "showlegend": true,
+          "xaxis": {
+            "autorange": true,
+            "range": [
+              946684800000,
+              978307200000
+            ],
+            "type": "int"
+          },
+          "yaxis": {
+            "autorange": true,
+            "range": [
+              70,
+              80
+            ],
+            "type": "float"
+          }
+        },
+        "onclick": "console.log(data)\nwindow.updateVariables({query:{'var-project':'test'}, partial: true})",
+        "script": "var indexes = []\n\nfunction onlyUnique(value, index, self) {\n  let res = self.indexOf(value) === index;\n  if (res) {\n    indexes.push(index);\n  }\n  return res;\n}\n\nvar filterIndexLo = 0;\nvar filterIndexHi = 0;\n\nfunction indexLess(value, index, self) {\n  return (index >= filterIndexLo && index < filterIndexHi);\n}\n\nvar unique = data.series[0].fields[0].values.buffer.filter(onlyUnique)\nconsole.log(unique);\nconsole.log(indexes);\nindexes.shift();\nindexes.push(data.series[0].fields[0].values.buffer.length);\nconsole.log(indexes);\n\ntraces = []\nfor (let i = 0; i < indexes.length; ++i) {\n  filterIndexHi = indexes[i];\n  var tracei = {\n    x: data.series[0].fields[1].values.buffer.filter(indexLess),\n    y: data.series[0].fields[2].values.buffer.filter(indexLess),\n    name: unique[i] + \" Wear FrontLeft\"\n  };\n  traces.push(tracei)\n  var trace2 = {\n    x: data.series[0].fields[1].values.buffer.filter(indexLess),\n    y: data.series[0].fields[3].values.buffer.filter(indexLess),\n    name: unique[i] + \" Wear FrontRight\"\n  };\n  traces.push(trace2)\n  var trace3 = {\n    x: data.series[0].fields[1].values.buffer.filter(indexLess),\n    y: data.series[0].fields[2].values.buffer.filter(indexLess),\n    name: unique[i] + \" Wear RearLeft\"\n  };\n  traces.push(trace3)\n  var trace4 = {\n    x: data.series[0].fields[1].values.buffer.filter(indexLess),\n    y: data.series[0].fields[2].values.buffer.filter(indexLess),\n    name: unique[i] + \" Wear RearRight\"\n  };\n  traces.push(trace3)\n  filterIndexLo = filterIndexHi;\n}\n  \nreturn {data:traces,layout:{}};"
+      },
+      "pluginVersion": "8.2.5",
+      "targets": [
+        {
+          "database": "raceanalysis",
+          "dateColDataType": "",
+          "dateLoading": false,
+          "dateTimeType": "DATETIME",
+          "datetimeLoading": false,
+          "extrapolate": true,
+          "format": "table",
+          "formattedQuery": "SELECT $timeSeries as t, count() FROM $table WHERE $timeFilter GROUP BY t ORDER BY t",
+          "intervalFactor": 1,
+          "query": "select * from (\nSELECT\n    raceid,\n    lapnumber,\n    max(tyrefl) as TyreFL,\n    max(tyrefr) as TyreFR,\n    max(tyrerl) as TyreRL,\n    max(tyrerr) as TyreRR,\n    max(fulel) - min(fulel) as FD\nFROM $table\nWHERE raceid in (select uuid from raceanalysis.comparison)\n\nGROUP BY raceid, lapnumber\nORDER BY raceid, lapnumber\n) where FD < 5.0",
+          "rawQuery": "select * from (\nSELECT\n    raceid,\n    lapnumber,\n    max(tyrefl) as TyreFL,\n    max(tyrefr) as TyreFR,\n    max(tyrerl) as TyreRL,\n    max(tyrerr) as TyreRR,\n    max(fulel) - min(fulel) as FD\nFROM raceanalysis.racedata\nWHERE raceid in (select uuid from raceanalysis.comparison)\n\nGROUP BY raceid, lapnumber\nORDER BY raceid, lapnumber\n) where FD < 5.0",
+          "refId": "A",
+          "round": "0s",
+          "skip_comments": true,
+          "table": "racedata",
+          "tableLoading": false
+        }
+      ],
+      "timeFrom": null,
+      "timeShift": null,
+      "title": "Time wear by lap",
+      "type": "ae3e-plotly-panel"
+    }
+  ],
+  "schemaVersion": 32,
+  "style": "dark",
+  "tags": [],
+  "templating": {
+    "list": []
+  },
+  "time": {
+    "from": "now-6h",
+    "to": "now"
+  },
+  "timepicker": {},
+  "timezone": "",
+  "title": "Comparison",
+  "uid": "wA1rD9pnk",
+  "version": 13
+}
