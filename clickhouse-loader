@@ -1,0 +1,116 @@
+#!/usr/bin/python
+
+from clickhouse_driver import Client
+import csv
+import json
+from datetime import datetime
+import argparse
+
+parser = argparse.ArgumentParser(description='Process data')
+parser.add_argument('--file', type=str, help='Input data')
+parser.add_argument('--host', type=str, help='Input data')
+
+args = parser.parse_args()
+
+racemeta = json.loads('{}')
+
+with open(args.file + '/metadata.json', 'r', newline='') as metadatafile:
+    racemeta = json.load(metadatafile)
+    print(json.dumps(racemeta, indent=4))
+
+# laps = []
+# with open('outdata_reduced_by_laps.csv', 'r', newline='') as csvfile:
+#     reader = csv.reader(csvfile, delimiter=',')
+#     for lap in reader:
+#         laps.append({
+#             'uuid': lap[0],
+#             'timepoint': float(lap[1]),
+#             'lap': int(float(lap[2])),
+#             'maxstraightspeed': float(lap[3]),
+#             'mincornerspeed': float(lap[4]),
+#             'groundspeed': float(lap[5]),
+#             'wearfl': float(lap[6]),
+#             'wearfr': float(lap[7]),
+#             'wearrl': float(lap[8]),
+#             'wearrr': float(lap[9]),
+#             'fuel': float(lap[10])
+#         })
+
+# laptimes = []
+# with open('laptimes.csv', 'r', newline='') as csvfile:
+#     reader = csv.reader(csvfile, delimiter=',')
+#     for lap in reader:
+#         laptimes.append({
+#             'uuid': lap[0],
+#             'lap': int(float(lap[1])),
+#             'time': float(lap[2])
+#         })
+
+client = Client(host=args.host)
+print(client.execute('INSERT INTO raceanalysis.racemetadata(uuid, track, vehicleclass, vehiclename, driver, racedate, racetime, samplespersec, duration, configname) VALUES',
+[{
+    "uuid" : racemeta["UUID"],
+    "track"    : racemeta["track"],
+    "vehicleclass" : racemeta["vehicle-class"],
+    "vehiclename" : racemeta["vehicle-name"],
+    "driver" : racemeta["driver"],
+    "racedate": datetime.strptime(str(racemeta["date"]), "%d.%m.%Y"),
+    "racetime" : racemeta["time"],
+    "samplespersec" : float(racemeta["samples-per-sec"]),
+    "duration" : float(racemeta["duration-seconds"]),
+    "configname" : racemeta["config-name"],
+}]))
+
+# print(client.execute('INSERT INTO raceanalysis.betterdata(uuid,timepoint,lap,maxstraightspeed,mincornerspeed,groundspeed,wearfl,wearfr,wearrl,wearrr,fuel) VALUES',
+# laps))
+
+# print(client.execute('INSERT INTO raceanalysis.laptimes(uuid,lap,time) VALUES',
+# laptimes))
+
+print(client.execute('alter table raceanalysis.last delete where 1=1'))
+val = {'id': racemeta['UUID']}
+print(client.execute('INSERT INTO raceanalysis.last(id) VALUES', [val]))
+
+
+scatters = []
+with open(args.file + '/outdata_final.csv', 'r', newline='') as csvfile:
+    reader = csv.reader(csvfile, delimiter=',')
+    for lap in reader:
+        scatters.append({
+            'raceid': lap[0],
+            'timepoint': float(lap[1]),
+            'lapnumber': int(float(lap[2])),
+            'maxcornerspeed': float(lap[3]),
+            'mincornerspeed': float(lap[4]),
+            'groundspeed': float(lap[5]),
+            'tyrefl': float(lap[6]),
+            'tyrefr': float(lap[7]),
+            'tyrerl': float(lap[8]),
+            'tyrerr': float(lap[9]),
+            'fulel': float(lap[10])
+        })
+
+print(client.execute('INSERT INTO raceanalysis.racedata(raceid,timepoint,lapnumber,maxcornerspeed,mincornerspeed,groundspeed,tyrefl,tyrefr,tyrerl,tyrerr,fulel) VALUES',
+scatters))
+
+# tyrepits = []
+# with open('tyrepits.csv', 'r', newline='') as csvfile:
+#     reader = csv.reader(csvfile, delimiter=',')
+#     for lap in reader:
+#         tyrepits.append({
+#             'raceid': lap[0],
+#             'lap': int(float(lap[1]))
+#         })
+
+# fuelpits = []
+# with open('fuelpits.csv', 'r', newline='') as csvfile:
+#     reader = csv.reader(csvfile, delimiter=',')
+#     for lap in reader:
+#         fuelpits.append({
+#             'raceid': lap[0],
+#             'lap': int(float(lap[1]))
+#         })
+
+
+# print(client.execute('INSERT INTO raceanalysis.tyrepitstops(raceid, lap) VALUES', tyrepits))
+# print(client.execute('INSERT INTO raceanalysis.fuelpitstops(raceid, lap) VALUES', fuelpits))
