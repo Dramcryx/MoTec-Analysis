@@ -14,9 +14,6 @@ parser.add_argument('--file', type=str, help='Input data')
 parser.add_argument('--output', type=str, help='Output path')
 
 args = parser.parse_args()
-print(args.cut)
-print(args.hours)
-
 metadatajson = json.loads('{}')
 
 file = args.file
@@ -121,7 +118,6 @@ with open(file, newline='') as csvfile:
     lines = []
     firstrow = moteccsv.__next__()
     lap = int(firstrow[indexoflap].replace('"', ''))
-    print(lap)
 
     for row in moteccsv:
         if len(row) == 0:
@@ -161,6 +157,7 @@ with open(args.output+'/metadata.json', 'w', newline='') as metadatafile:
     metadatajson['UUID'] = raceid
     metadatajson['config-name'] = args.output.replace('."', '')
     metadatafile.write(json.dumps(metadatajson, indent=4))
+    print(json.dumps(metadatajson, indent=4))
 
 with open(args.output+'/laptimes.csv', 'w', newline='') as csvfile:
     outcsv = csv.writer(csvfile, delimiter=',',
@@ -168,6 +165,7 @@ with open(args.output+'/laptimes.csv', 'w', newline='') as csvfile:
     for t in laptimes:
         t.insert(0, raceid)
         outcsv.writerow(t)
+        print(t)
 
 with open(args.output+'/outdata.csv', 'w', newline='') as csvfile:
     outcsv = csv.writer(csvfile, delimiter=',',

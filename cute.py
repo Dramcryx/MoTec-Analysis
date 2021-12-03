@@ -76,6 +76,7 @@ def loadMetadata():
 
 def setMetadataHeaders(clickclient, model):
     headers = [i[0] for i in clickclient.execute("desc raceanalysis.racemetadata")]
+    print(headers)
     for i in range(len(headers)):
         model.setHeaderData(i, Qt.Horizontal, headers[i])
 

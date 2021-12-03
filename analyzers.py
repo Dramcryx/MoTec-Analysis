@@ -24,8 +24,6 @@ def get_tyre_pitstops(lapscatters, tyre_index, lapindex):
         else:
             tyre_last_line = float(lap[tyre_index].replace('"', ''))
         if tyre_this_line > tyre_last_line and not asc:
-            print(tyre_this_line)
-            print(tyre_last_line)
             asc = True
             tyre_pitsops.append([lap[0], lap[lapindex]])
         elif tyre_this_line < tyre_last_line:
@@ -50,7 +48,6 @@ def get_laps(lapscatters, indexoflap, field_reduction_rules, remove_laps):
             lapscatters[lap][indexoflap] = int(lapscatters[lap][indexoflap]) - remove_laps + 1
         for index in range(len(lapdata)):
             lapdata[index] = field_reduction_rules[index](lapscatters, index, laprange)
-        print(lapdata)
         laps.append(lapdata)
         current_lap_scatter = scatter
     
@@ -63,6 +60,5 @@ def get_laps(lapscatters, indexoflap, field_reduction_rules, remove_laps):
         lapscatters[lap][indexoflap] = int(lapscatters[lap][indexoflap]) - remove_laps + 1
     for index in range(len(lapdata)):
         lapdata[index] = field_reduction_rules[index](lapscatters, index, laprange)
-    print(lapdata)
     laps.append(lapdata)
     return laps
