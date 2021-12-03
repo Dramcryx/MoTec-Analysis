@@ -124,6 +124,9 @@ with open(file, newline='') as csvfile:
     for row in moteccsv:
         if len(row) == 0:
             continue
+        lapUnquoted = row[indexoflap].replace('"', '')
+        if lapUnquoted == '':
+            continue
         if int(row[indexoflap].replace('"', '')) == args.cut:
             break
         if '""' in row:

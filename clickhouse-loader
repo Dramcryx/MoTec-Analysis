@@ -8,7 +8,8 @@ import argparse
 
 parser = argparse.ArgumentParser(description='Process data')
 parser.add_argument('--file', type=str, help='Input data')
-parser.add_argument('--host', type=str, help='Input data')
+parser.add_argument('--host', default='store', type=str, help='Input data')
+parser.add_argument('--port', default=9000, type=int, help='Input data')
 
 args = parser.parse_args()
 
@@ -46,7 +47,7 @@ with open(args.file + '/metadata.json', 'r', newline='') as metadatafile:
 #             'time': float(lap[2])
 #         })
 
-client = Client(host=args.host)
+client = Client(host=args.host, port=args.port)
 print(client.execute('INSERT INTO raceanalysis.racemetadata(uuid, track, vehicleclass, vehiclename, driver, racedate, racetime, samplespersec, duration, configname) VALUES',
 [{
     "uuid" : racemeta["UUID"],
