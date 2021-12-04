@@ -115,3 +115,5 @@ scatters))
 
 # print(client.execute('INSERT INTO raceanalysis.tyrepitstops(raceid, lap) VALUES', tyrepits))
 # print(client.execute('INSERT INTO raceanalysis.fuelpitstops(raceid, lap) VALUES', fuelpits))
+
+print("Successfully uploaded to ClickHouse")

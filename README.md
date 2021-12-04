@@ -12,7 +12,7 @@
 
 5) http://localhost:3317/datasources/new -> ClickHouse -> URL http://store:8123/ -> Save & test. Должно быть сообщиение 'Data source is working'.
    
-6) http://localhost:3317/dashboard/import -> Upload JSON -> корень репозитория -> dashboards -> 'Last upload.json'. Повторить для 'Comparison.json'. Визуализация готова.
+6) http://localhost:3317/dashboard/import -> Upload JSON -> корень репозитория -> dashboards -> 'Last upload.json'. Повторить для 'Comparison.json'. **Визуализация готова**.
 
 7) Из корня запустить GUI клиента ./client
 
@@ -24,8 +24,8 @@
 
 11) По завершении работы `docker-compose down` или `Ctlr+C` там, где был `up`.
 
-12) Чтобы удалить их, вызовите `./distclean.sh`.
+    Note: Поскольку volumes созданы в dist, то на следующий `docker-compose up` данные останутся как в базе, так и в Grafana.
 
-Note: Поскольку volumes созданы в dist, то на следующий `docker-compose up` данные останутся как в базе, так и в Grafana.
+13) Чтобы удалить созданные контейнеры (вместе с данными в них), вызовите `./distclean.sh`.
 
 <h3>TODO Вариант 2: Amazon EC2 (in progress)</h3>
