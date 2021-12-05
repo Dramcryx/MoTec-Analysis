@@ -29,3 +29,13 @@
 13) Чтобы удалить созданные контейнеры (вместе с данными в них), вызовите `./distclean.sh`.
 
 <h3>TODO Вариант 2: Amazon EC2 (in progress)</h3>
+
+<h3>Возможные ошибки</h3>
+
+1) Cannot connect to the Docker daemon at unix:///var/run/docker.sock. Is the docker daemon running?
+
+Докер демон не поднят. На Linux с systemd вы можете попробовать его запустить командой `systemctl start docker`
+
+2) Got permission denied while trying to connect to the Docker daemon socket at unix:///var/run/docker.sock: Get "http://%2Fvar%2Frun%2Fdocker.sock/_ping": dial unix /var/run/docker.sock: connect: permission denied
+
+https://docs.docker.com/engine/install/linux-postinstall/ - шаги 1-3 + перелогиниться
