@@ -1,0 +1,60 @@
+#!/usr/bin/python
+
+import requests
+import os
+import json
+
+grafana_host = 'localhost'
+grafana_port = 3317
+grafana_user = 'admin'
+grafana_password = 'admin'
+
+
+grafana_url = os.path.join('http://', '%s:%u' % (grafana_host, grafana_port))
+session = requests.Session()
+login_post = session.post(
+   os.path.join(grafana_url, 'login'),
+   data=json.dumps({
+      'user': grafana_user,
+      'email': '',
+      'password': grafana_password }),
+   headers={'content-type': 'application/json'})
+
+token_cookie = login_post.headers['Set-Cookie'].split('; ')[0]
+
+splittedCookies = token_cookie.split('=')
+
+add_clickhouse_post = session.post(
+   os.path.join(grafana_url, 'api', 'datasources'),
+   data=json.dumps({
+    "name": "ClickHouse",
+    "type": "vertamedia-clickhouse-datasource",
+    "url": "http://store:8123",
+    "access": "proxy",
+    "isDefault": True,
+    "database": "raceanalysis"
+    }),
+   headers={'content-type': 'application/json'},
+   cookies={splittedCookies[0]: splittedCookies[1]})
+
+with open("dashboards/Comparison.json", "r") as read_file:
+    comparison_json = json.load(read_file)
+    comparison_json['id'] = None
+    comparison_json['uid'] = None
+
+    add_dashboards_post = session.post(
+    os.path.join(grafana_url, 'api', 'dashboards', 'db'),
+    data=json.dumps({"dashboard": comparison_json}),
+    headers={'content-type': 'application/json'},
+    cookies={splittedCookies[0]: splittedCookies[1]})
+
+with open("dashboards/Last upload.json", "r") as read_file:
+    lastupload_json = json.load(read_file)
+    lastupload_json['id'] = None
+    lastupload_json['uid'] = None
+
+    add_dashboards_post = session.post(
+    os.path.join(grafana_url, 'api', 'dashboards', 'db'),
+    data=json.dumps({"dashboard": lastupload_json}),
+    headers={'content-type': 'application/json'},
+    cookies={splittedCookies[0]: splittedCookies[1]})
