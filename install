@@ -17,7 +17,7 @@ try:
 except:
     print('Dist directory already exists')
 
-for i in ['./dist/compute', './dist/store', './dist/visualize']:
+for i in ['./dist/compute', './dist/store', './dist/store/init', './dist/visualize']:
     if not os.path.isdir(i):
         os.mkdir(i, mode=0o777)
 
@@ -34,21 +34,23 @@ composeFileContent = composeFileContent.replace('COMPUTE', computePath).replace(
 with open('dist/docker-compose.yml', 'w') as composeFile:
     composeFile.write(composeFileContent)
 
-clickhouseInit='''
-CREATE DATABASE IF NOT EXISTS raceanalysis;
-CREATE TABLE IF NOT EXISTS raceanalysis.comparison(uuid UUID) ENGINE = MergeTree() PRIMARY KEY uuid;
-CREATE TABLE IF NOT EXISTS raceanalysis.last(id UUID) ENGINE = MergeTree() PRIMARY KEY id;
-CREATE TABLE IF NOT EXISTS raceanalysis.racedata(raceid UUID, timepoint Float32, lapnumber Int32, maxcornerspeed Float32, mincornerspeed Float32, groundspeed Float32, tyrefl Float32, tyrefr Float32, tyrerl Float32, tyrerr Float32, fulel Float32) ENGINE = MergeTree() PRIMARY KEY raceid;
-CREATE TABLE IF NOT EXISTS raceanalysis.racemetadata(uuid UUID, track  String, vehicleclass String, vehiclename  String, driver String, racedate Date, racetime String, samplespersec Float32, duration Float32, configname String) ENGINE = MergeTree() PRIMARY KEY uuid;
+initDatabase = '''
+#!/bin/bash
+set -e
+
+clickhouse client -n <<-EOSQL    
+    CREATE DATABASE IF NOT EXISTS raceanalysis;
+    CREATE TABLE IF NOT EXISTS raceanalysis.comparison(uuid UUID) ENGINE = MergeTree() PRIMARY KEY uuid;
+    CREATE TABLE IF NOT EXISTS raceanalysis.last(id UUID) ENGINE = MergeTree() PRIMARY KEY id;
+    CREATE TABLE IF NOT EXISTS raceanalysis.racedata(raceid UUID, timepoint Float32, lapnumber Int32, maxcornerspeed Float32, mincornerspeed Float32, groundspeed Float32, tyrefl Float32, tyrefr Float32, tyrerl Float32, tyrerr Float32, fulel Float32) ENGINE = MergeTree() PRIMARY KEY raceid;
+    CREATE TABLE IF NOT EXISTS raceanalysis.racemetadata(uuid UUID, track  String, vehicleclass String, vehiclename  String, driver String, racedate Date, racetime String, samplespersec Float32, duration Float32, configname String) ENGINE = MergeTree() PRIMARY KEY uuid;
+EOSQL
 '''
 
-with open('dist/store/clickhouse.sql', 'w') as clickhouseFile:
-    clickhouseFile.write(clickhouseInit)
+with open('dist/store/init/init-database.sh', 'w') as clickhouseScript:
+    clickhouseScript.write(initDatabase)
 
-with open('dist/init-database.sh', 'w') as clickhouseScript:
-    clickhouseScript.write("docker-compose exec store /bin/bash -c 'clickhouse-client --queries-file=/var/lib/clickhouse/clickhouse.sql'")
-
-os.chmod('dist/init-database.sh', 0o755)
+os.chmod('dist/store/init/init-database.sh', 0o755)
 
 os.system('pip install clickhouse-driver paramiko pyqt5')
 os.system('cd dist; docker-compose build')

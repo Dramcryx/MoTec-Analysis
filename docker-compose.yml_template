@@ -9,6 +9,7 @@ services:
     image: yandex/clickhouse-server:latest
     volumes:
       - STORE:/var/lib/clickhouse
+      - STORE/init/:/docker-entrypoint-initdb.d
     ports:
      - "8769:9000"
      - "8767:8123"
