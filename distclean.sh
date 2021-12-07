@@ -1,4 +1,4 @@
-cd dist; docker-compose rm -f; cd ../
+cd dist; docker-compose down; docker-compose rm -f; cd ../
 
 sudo rm -rf ./dist/**
 
