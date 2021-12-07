@@ -4,13 +4,13 @@ import os
 
 os.umask(0)
 
-assert(os.system('docker-compose --version') == 0, 'Docker compose не найден в PATH')
+assert os.system('docker-compose --version') == 0, 'Docker compose не найден в PATH'
 
-assert(os.system('docker --version') == 0, 'Docker не найден в PATH')
+assert os.system('docker --version') == 0, 'Docker не найден в PATH'
 
-assert(os.system('python --version') == 0, 'Python не найден в PATH')
+assert os.system('python --version') == 0, 'Python не найден в PATH'
 
-assert(os.system('pip --version') == 0, 'PIP не найден в PATH')
+assert os.system('pip --version') == 0, 'PIP не найден в PATH'
 
 try:
     os.mkdir('./dist/', mode=0o777)
