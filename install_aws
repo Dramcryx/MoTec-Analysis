@@ -1,0 +1,60 @@
+#!/usr/bin/python3
+
+import os
+
+os.umask(0)
+
+os.system('sudo groupadd docker && sudo usermod -aG docker $USER && newgrp docker;sudo systemctl start docker.service')
+os.system('sudo curl -L "https://github.com/docker/compose/releases/download/1.29.2/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose; sudo chmod 0755 /usr/local/bin/docker-compose')
+
+assert os.system('docker-compose --version') == 0, 'Docker compose не найден в PATH'
+
+assert os.system('docker --version') == 0, 'Docker не найден в PATH'
+
+assert os.system('python3 --version') == 0, 'Pythonне найден в PATH'
+
+assert os.system('pip3 --version') == 0, 'PIP не найден в PATH'
+
+try:
+    os.mkdir('./dist/', mode=0o777)
+except:
+    print('Dist directory already exists')
+
+for i in ['./dist/compute', './dist/store', './dist/store/init', './dist/visualize']:
+    if not os.path.isdir(i):
+        os.mkdir(i, mode=0o777)
+
+computePath = os.getcwd() + '/dist/compute'
+storePath = os.getcwd() + '/dist/store'
+visualizePath = os.getcwd() + '/dist/visualize'
+
+composeFileContent = None
+with open('docker-compose.yml_template', 'r') as composeFile:
+    composeFileContent = composeFile.read()
+
+composeFileContent = composeFileContent.replace('COMPUTE', computePath).replace('STORE', storePath).replace('VISUALIZE', visualizePath)
+
+with open('dist/docker-compose.yml', 'w') as composeFile:
+    composeFile.write(composeFileContent)
+
+initDatabase = '''
+#!/bin/bash
+set -e
+
+clickhouse client -n <<-EOSQL    
+    CREATE DATABASE IF NOT EXISTS raceanalysis;
+    CREATE TABLE IF NOT EXISTS raceanalysis.comparison(uuid UUID) ENGINE = MergeTree() PRIMARY KEY uuid;
+    CREATE TABLE IF NOT EXISTS raceanalysis.last(id UUID) ENGINE = MergeTree() PRIMARY KEY id;
+    CREATE TABLE IF NOT EXISTS raceanalysis.racedata(raceid UUID, timepoint Float32, lapnumber Int32, maxcornerspeed Float32, mincornerspeed Float32, groundspeed Float32, tyrefl Float32, tyrefr Float32, tyrerl Float32, tyrerr Float32, fulel Float32) ENGINE = MergeTree() PRIMARY KEY raceid;
+    CREATE TABLE IF NOT EXISTS raceanalysis.racemetadata(uuid UUID, track  String, vehicleclass String, vehiclename  String, driver String, racedate Date, racetime String, samplespersec Float32, duration Float32, configname String) ENGINE = MergeTree() PRIMARY KEY uuid;
+EOSQL
+'''
+
+with open('dist/store/init/init-database.sh', 'w') as clickhouseScript:
+    clickhouseScript.write(initDatabase)
+
+os.chmod('dist/store/init/init-database.sh', 0o755)
+
+os.system('pip3 install clickhouse-driver paramiko pyqt5')
+openConnectionCommand = "sed -i 's/<!-- <listen_host>0.0.0.0<\/listen_host> -->/<listen_host>0.0.0.0<\/listen_host>/g' /etc/clickhouse-server/config.xml"
+os.system(f'cd dist && docker-compose build && (docker-compose up & sleep 0);docker-compose exec store {openConnectionCommand};')
