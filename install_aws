@@ -54,6 +54,5 @@ with open('dist/store/init/init-database.sh', 'w') as clickhouseScript:
 
 os.chmod('dist/store/init/init-database.sh', 0o755)
 
-os.system('pip3 install clickhouse-driver paramiko pyqt5')
 openConnectionCommand = "sed -i 's/<!-- <listen_host>0.0.0.0<\/listen_host> -->/<listen_host>0.0.0.0<\/listen_host>/g' /etc/clickhouse-server/config.xml"
 os.system(f'cd dist && docker-compose build && (docker-compose up & sleep 0);docker-compose exec store {openConnectionCommand};')
