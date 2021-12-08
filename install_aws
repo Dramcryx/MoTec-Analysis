@@ -10,10 +10,6 @@ assert os.system('docker-compose --version') == 0, 'Docker compose не найд
 
 assert os.system('docker --version') == 0, 'Docker не найден в PATH'
 
-assert os.system('python3 --version') == 0, 'Pythonне найден в PATH'
-
-assert os.system('pip3 --version') == 0, 'PIP не найден в PATH'
-
 try:
     os.mkdir('./dist/', mode=0o777)
 except:
