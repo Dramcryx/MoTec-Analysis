@@ -3,9 +3,8 @@
 import os
 
 os.umask(0)
-
-os.system('sudo groupadd docker && sudo usermod -aG docker $USER && newgrp docker;sudo systemctl start docker.service')
-os.system('sudo curl -L "https://github.com/docker/compose/releases/download/1.29.2/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose; sudo chmod 0755 /usr/local/bin/docker-compose')
+os.system('sudo groupadd docker && sudo usermod -aG docker $USER && sudo service docker start')
+os.system('sudo curl -L "https://github.com/docker/compose/releases/download/1.29.2/docker-compose-$(uname -s)-$(uname -m)" -o /usr/bin/docker-compose; sudo chmod 0755 /usr/bin/docker-compose')
 
 assert os.system('docker-compose --version') == 0, 'Docker compose не найден в PATH'
 
