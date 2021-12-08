@@ -43,23 +43,17 @@ def loadMetadata():
         print(d.textValue())
     else:
         return
-    if args.local_pipe:
+    if not args.remote_pipe:
         head, tail = os.path.split(filename[0])
         os.system(f"cp {filename[0]} ./dist/compute; cd dist; docker-compose run compute ./execpipeline.sh /home/{tail} {cut} {int(d.textValue())} {tail.split('.')[0]} store")
         return
-    # ssh = paramiko.SSHClient()
-    # ssh.set_missing_host_key_policy(paramiko.AutoAddPolicy())
-    # ssh.connect(args.host, username='ec2-user', key_filename=args.ssh_key)
-    # stdin, stdout, stderr = ssh.exec_command('ls')
-    # print(stdout.readlines())
-    # ssh.close()
+
     rsa = paramiko.RSAKey.from_private_key_file(args.ssh_key)
     # Open a transport
     host,port = args.host,22
     transport = paramiko.Transport((host,port))
 
     # Auth    
-    username,password = "bar","foo"
     transport.connect(None,'ec2-user',None,pkey=rsa)
 
     # Go!    
@@ -70,13 +64,21 @@ def loadMetadata():
 
     # Upload
     head, tail = os.path.split(filename[0])
-    filepath = "/home/ec2-user/" + tail
+    filepath = "/home/ec2-user/MoTec-Analysis/dist/compute/" + tail
     localpath = filename[0]
     sftp.put(localpath,filepath)
 
     # Close
     if sftp: sftp.close()
     if transport: transport.close()
+
+    ssh = paramiko.SSHClient()
+    ssh.set_missing_host_key_policy(paramiko.AutoAddPolicy())
+    ssh.connect(args.host, username='ec2-user', key_filename=args.ssh_key)
+    stdin, stdout, stderr = ssh.exec_command(f"cd /home/ec2-user/MoTec-Analysis/dist/;docker-compose run compute ./execpipeline.sh /home/{tail} {cut} {int(d.textValue())} {tail.split('.')[0]} store")
+    print(stdout.readlines())
+    print(stderr.readlines())
+    ssh.close()
 
 def setMetadataHeaders(clickclient, model):
     headers = [i[0] for i in clickclient.execute("desc raceanalysis.racemetadata")]
@@ -130,9 +132,10 @@ if __name__ == '__main__':
     parser.add_argument('--host', type=str, default='localhost', help='Input data')
     parser.add_argument('--port', type=str, default='8769', help='Input data')
     parser.add_argument('--ssh-key', type=str, default='localhost', help='Input data')
-    parser.add_argument('--local-pipe', type=bool, default=True, help='Input data')
+    parser.add_argument('--remote-pipe', type=bool, default=False, help='Input data')
 
     args = parser.parse_args()
+    print(args)
     client = None
     try:
         client = Client(host=args.host, port=args.port)
